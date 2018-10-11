@@ -12,7 +12,7 @@ import Control.Monad.State hiding (lift)
 import Data.Traversable
 import qualified Data.Set as S
 
-lift :: Arrow (~>) => DefinitionsFV ~> Definitions
+lift :: Arrow k => DefinitionsFV `k` Definitions
 lift = arr (Defs . concat . zipWith single [0..] . unDefs)
 
   where

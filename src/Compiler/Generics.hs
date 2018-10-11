@@ -1,10 +1,10 @@
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE KindSignatures, FlexibleContexts, UndecidableInstances #-}
 module Compiler.Generics where
 
 import Data.Foldable
 import Data.Monoid
 
-newtype FixA a f = In { out :: a f (FixA a f) }
+newtype FixA (a :: (* -> *) -> * -> *) f = In { out :: a f (FixA a f) }
 
 newtype Id f a = Id { unId :: f a }
   deriving Eq

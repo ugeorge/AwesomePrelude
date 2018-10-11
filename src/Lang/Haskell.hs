@@ -18,6 +18,12 @@ instance NameC Haskell where
 
 type instance H (a -> b) = H a -> H b
 
+instance P.Show a  => P.Show (Haskell a) where
+  show = P.show
+
+-- instance P.Show a  => P.Show (H a) where
+--   show = P.show
+
 instance LamFunC Haskell where
   lam f             = Hs (\x -> runHaskell (f (Hs x)))
 
@@ -28,6 +34,8 @@ instance RecFunC Haskell where
   fix f             = f (fix f)
 
 type instance H Bool = P.Bool
+type instance H P.Integer = P.Integer
+
 
 instance BoolC Haskell where
   false           = Hs P.False
@@ -64,11 +72,21 @@ instance ListC Haskell where
 
 -- * Haskell instances of AwesomePrelude type classes.
 
+instance (P.Num a) => P.Num (Haskell a) where
+  (+) = (P.+)
+  (-) = (P.-)
+  (*) = (P.*)
+  fromInteger = P.fromInteger
+
+
 instance (P.Num a) => Num Haskell a where
   (+) = (P.+)
   (-) = (P.-)
   (*) = (P.*)
   fromInteger = P.fromInteger
+
+instance (P.Eq a) => P.Eq (Haskell a) where
+  x == y = if x P.== y then P.True else P.False
 
 instance (P.Eq a) => Eq Haskell a where
   x == y = if x P.== y then true else false

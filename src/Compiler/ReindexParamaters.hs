@@ -12,7 +12,7 @@ import Data.Map (Map, insert, lookup, empty)
 import Data.Maybe
 import Prelude hiding (lookup)
 
-reindex :: Arrow (~>) => Definitions ~> Definitions
+reindex :: Arrow k => Definitions `k` Definitions
 reindex = arr (Defs . map one . unDefs)
   where
 

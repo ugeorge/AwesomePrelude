@@ -20,6 +20,14 @@ cabal-version:       >= 1.6
 library
   hs-source-dirs:    src
   exposed-modules:   Compiler.Pipeline,
+                     Compiler.FreeVariables
+                     Compiler.CommonDefinitions
+                     Compiler.Expression
+                     Compiler.Generics
+                     Compiler.InstantiateLambdas
+                     Compiler.LiftClosedApplications
+                     Compiler.LiftDefinitions
+                     Compiler.ReindexParamaters
                      Generic.Control.Alternative
                      Generic.Control.Applicative
                      Generic.Control.Category
@@ -42,6 +50,13 @@ library
                      Lang.JavaScript,
                      Lang.Value
   build-depends:     base >= 3 && < 5,
-                     containers >= 0.3 && < 0.4,
+                     containers >= 0.3 && <= 0.5,
                      mtl >= 2.0 && < 2.1
 
+-- Executable: awesome
+--   Main-is: Main.hs
+--   HS-Source-Dir: src
+--   build-depends:     base >= 3 && < 5,
+--                      containers >= 0.3 && <= 0.5,
+--                      mtl >= 2.0 && < 2.1,
+--                      dyn

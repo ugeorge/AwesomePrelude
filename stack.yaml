@@ -1,0 +1,9 @@
+packages:
+- ./
+
+resolver: ghc-7.8.4
+
+extra-deps:
+- mtl-2.0.1.1
+- transformers-0.2.2.1
+- containers-0.4.1.0

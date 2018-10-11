@@ -10,7 +10,7 @@ import Control.Monad.Reader
 import Data.List (intercalate)
 import qualified Lang.Value as V
 
-instantiate :: Arrow (~>) => V.Val l i ~> Expression
+instantiate :: Arrow k => V.Val l i `k` Expression
 instantiate = arr (flip runReader 0 . tr)
   where
     tr :: V.Val l i -> Reader Integer Expression
@@ -21,7 +21,7 @@ instantiate = arr (flip runReader 0 . tr)
     tr (V.Prim s vs) = pure (prim s vs)
     tr (V.Var  v   ) = pure (var v)
 
-dump :: Arrow (~>) => Expression ~> String
+dump :: Arrow k => Expression `k` String
 dump = arr rec
   where
     tr (App  f e ) = rec f ++ "(\n" ++ indent (rec e) ++ ")"

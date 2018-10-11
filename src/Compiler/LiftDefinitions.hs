@@ -52,13 +52,13 @@ collect = reduce defs
 -- Lift all definitions to the top-level and inline all references to these
 -- definitions in the main expression.
 
-lift :: Arrow (~>) => Expression ~> Definitions
+lift :: Arrow k => Expression `k` Definitions
 lift = arr (\e -> Defs (collect e ++ [Def "__main" (inline e)]))
 
-eliminiateDoubles :: Arrow (~>) => Definitions ~> Definitions
+eliminiateDoubles :: Arrow k => Definitions `k` Definitions
 eliminiateDoubles = arr (Defs . nubBy (\a b -> defName a == defName b) . unDefs)
 
-dump :: Arrow (~>) => Definitions ~> String
+dump :: Arrow k => Definitions `k` String
 dump = arr (intercalate "\n" . map one . unDefs)
   where
     one (Def d e)  = "var " ++ d ++ " = " ++ rec e

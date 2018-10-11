@@ -22,7 +22,7 @@ data FreeVarA f a = FreeVarA { free :: Set String , expr :: f a }
 
 type ExpressionFV = FixA FreeVarA ExpressionF
 
-annotateExpression :: Arrow (~>) => Set String -> Expression ~> ExpressionFV
+annotateExpression :: Arrow k => Set String -> Expression `k` ExpressionFV
 annotateExpression globs = arr ow
   where 
   ow ex = rec ex
@@ -44,13 +44,13 @@ annotateExpression globs = arr ow
 type DefinitionFV  = DefinitionA  FreeVarA
 type DefinitionsFV = DefinitionsA FreeVarA
 
-annotateDefinitions :: Arrow (~>) => Definitions ~> DefinitionsFV
+annotateDefinitions :: Arrow k => Definitions `k` DefinitionsFV
 annotateDefinitions = arr $ \(Defs ds) ->
   let globs = fromList (map defName ds)
       ann   = annotateExpression globs
   in Defs (map (\(Def n e) -> Def n (ann e)) ds)
 
-dump :: Arrow (~>) => DefinitionsFV ~> String
+dump :: Arrow k => DefinitionsFV `k` String
 dump = arr (intercalate "\n" . map one . unDefs)
   where
     one (Def d e) = "var " ++ d ++ " = " ++ rec e

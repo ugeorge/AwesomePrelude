@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, OverlappingInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Generic.Data.List where
@@ -10,6 +10,8 @@ import Generic.Data.Num
 import Generic.Data.Ord
 import Generic.Control.Function
 import Generic.Control.Functor
+
+import qualified Prelude
 
 -- data List a
 -- instead of `List a`, use `[a]`
@@ -32,6 +34,14 @@ instance (BoolC j, ListC j, Ord j a) => Ord j [a] where
 instance (RecFunC j, ListC j) => Functor j [] where
   fmap f = foldr (\a r -> f a `cons` r) nil
 
+
+-- one :: Num j a => AG (j a)
+-- one = AG (1 :: Prelude.Integer)
+
+-- zero :: Num j a => AG (j a)
+-- zero = AG 0
+
+
 singleton :: ListC j => j a -> j [a]
 singleton a = a `cons` nil
 
@@ -44,17 +54,17 @@ foldr f b xs = fix (\r -> lam (list b (\y ys -> f y (r `app` ys)))) `app` xs
 foldr' :: (RecFunC j, ListC j) => j (a -> b -> b) -> j b -> j [a] -> j b
 foldr' f b xs = fix (\r -> lam (list b (\y ys -> f `app` y `app` (r `app` ys)))) `app` xs
 
-replicate :: (Eq j a, BoolC j, RecFunC j, ListC j, Num j a) => j a -> j b -> j [b]
-replicate n a = fix (\r -> lam (\y -> bool nil (a `cons` (r `app` (y - 1))) (y == 0))) `app` n
+-- replicate :: (Eq j a, BoolC j, RecFunC j, ListC j, Num j a) => j a -> j b -> j [b]
+-- replicate n a = fix (\r -> lam (\y -> bool nil (a `cons` (r `app` (y - (fromAG one)))) (y == (fromAG 0)))) `app` n
 
 (++) :: (RecFunC j, ListC j) => j [a] -> j [a] -> j [a]
 xs ++ ys = foldr cons ys xs
 
-genericLength :: (RecFunC j, ListC j, Num j a) => j [b] -> j a
-genericLength = foldr (\_ -> (+1)) 0
+-- genericLength :: (RecFunC j, ListC j, Num j a) => j [b] -> j a
+-- genericLength = foldr (\_ -> (+1)) 0
 
-sum :: (RecFunC j, ListC j, Num j a) => j [a] -> j a
-sum = foldr (+) 0
+-- sum :: (RecFunC j, ListC j, Num j a) => j [a] -> j a
+-- sum = foldr (+) 0
 
 filter :: (BoolC j, RecFunC j, ListC j) => (j a -> j Bool) -> j [a] -> j [a]
 filter p = foldr (\x xs -> bool xs (x `cons` xs) (p x)) nil

@@ -61,6 +61,13 @@ instance Num (Val JS) Number where
   (*) = fun2 "mul" (op " * ")
   fromInteger x = Con (P.show x)
 
+instance P.Num (Val JS Number) where
+  (+) = fun2 "add" (op " + ")
+  (-) = fun2 "sub" (op " - ")
+  (*) = fun2 "mul" (op " * ")
+  fromInteger x = Con (P.show x)
+
+
 instance Eq (Val JS) Bool where
   (==) = fun2 "eq"  (op " == ")
   (/=) = fun2 "neq" (op " /= ")

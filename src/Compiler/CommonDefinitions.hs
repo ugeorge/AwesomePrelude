@@ -9,7 +9,7 @@ import Control.Arrow hiding (app)
 import Data.Either
 import Prelude hiding (lookup)
 
-eliminate :: Arrow (~>) => Definitions ~> Definitions
+eliminate :: Arrow k => Definitions `k` Definitions
 eliminate = arr (Defs . fixpoint f . unDefs)
   where
   f []     = []
